@@ -94,11 +94,25 @@ case "$PLATFORM-$ARCH" in
 esac
 
 if [ "${VERSION:-}" = "" ]; then
-  RELEASE_URL="https://github.com/mamba-org/micromamba-releases/releases/latest/download/micromamba-${PLATFORM}-${ARCH}"
+  # https://github.com/richinsley/installscripts/releases/latest/download/comfycli-osx-arm64
+  RELEASE_URL="https://github.com/richinsley/installscripts/releases/latest/download/comfycli-${PLATFORM}-${ARCH}"
 else
-  RELEASE_URL="https://github.com/mamba-org/micromamba-releases/releases/download/micromamba-${VERSION}/micromamba-${PLATFORM}-${ARCH}"
+  # https://github.com/richinsley/installscripts/releases/download/v0.0.1/comfycli-osx-arm64
+  RELEASE_URL="https://github.com/richinsley/installscripts/releases/download/installscripts-${VERSION}/comfycli-${PLATFORM}-${ARCH}"
 fi
 
 echo $BIN_FOLDER
 echo $PLATFORM-$ARCH
 echo $RELEASE_URL
+
+# Downloading artifact
+mkdir -p "${BIN_FOLDER}"
+if hash curl >/dev/null 2>&1; then
+  curl "${RELEASE_URL}" -o "${BIN_FOLDER}/comfycli" -fsSL --compressed ${CURL_OPTS:-}
+elif hash wget >/dev/null 2>&1; then
+  wget ${WGET_OPTS:-} -qO "${BIN_FOLDER}/comfycli" "${RELEASE_URL}"
+else
+  echo "Neither curl nor wget was found" >&2
+  exit 1
+fi
+chmod +x "${BIN_FOLDER}/comfycli"
