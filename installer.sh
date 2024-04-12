@@ -21,6 +21,20 @@ esac
 echo "Parent shell: $parent"
 
 find_writable_path_dir() {
+# Check if comfycli is already in the PATH
+    comfycli_path=$(command -v comfycli 2>/dev/null)
+
+    if [ -n "$comfycli_path" ]; then
+        # comfycli is found in the PATH
+        comfycli_dir=$(dirname "$comfycli_path")
+
+        if [ -w "$comfycli_dir" ]; then
+            # The directory containing comfycli is writable
+            echo "$comfycli_dir"
+            return 0
+        fi
+    fi
+
     # Get the PATH environment variable
     path=$PATH
 
@@ -55,16 +69,7 @@ if [ -t 0 ] ; then
 
   # if BIN_FOLDER is empty, set it to the presented value
   BIN_FOLDER="${BIN_FOLDER:-$writable_path_dir}"
-
-  # printf "Init shell ($shell)? [Y/n] "
-  # read INIT_YES
-  # printf "Configure conda-forge? [Y/n] "
-  # read CONDA_FORGE_YES
 fi
-
-# # Fallbacks
-# INIT_YES="${INIT_YES:-yes}"
-# CONDA_FORGE_YES="${CONDA_FORGE_YES:-yes}"
 
 # Computing artifact location
 case "$(uname)" in
