@@ -29,3 +29,7 @@ if ($PATH -notlike "*$Env:LocalAppData\comfycli*") {
 } else {
     Write-Output "$COMFYCLI_INSTALL_PATH is already in PATH`n"
 }
+
+# Check if comfycli is installed correctly by running comfycli --help
+Write-Output "`nVerifying comfycli installation`n"
+comfycli --help
