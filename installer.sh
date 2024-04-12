@@ -116,3 +116,6 @@ else
   exit 1
 fi
 chmod +x "${BIN_FOLDER}/comfycli"
+
+# test run the binary to initialize the home directory
+"${BIN_FOLDER}/comfycli" --help
