@@ -26,10 +26,13 @@ $PATH = [Environment]::GetEnvironmentVariable("Path", "User")
 if ($PATH -notlike "*$Env:LocalAppData\comfycli*") {
     Write-Output "Adding $COMFYCLI_INSTALL_PATH to PATH`n"
     [Environment]::SetEnvironmentVariable("Path", "$Env:LocalAppData\comfycli;" + [Environment]::GetEnvironmentVariable("Path", "User"), "User")
+    
+    # Refresh the PATH variable in the current PowerShell session
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + [System.Environment]::GetEnvironmentVariable("Path","Machine")
 } else {
     Write-Output "$COMFYCLI_INSTALL_PATH is already in PATH`n"
 }
 
-# Check if comfycli is installed correctly by running comfycli --help
+# Run comfycli --help to verify the installation and initialize the comfycli home directory
 Write-Output "`nVerifying comfycli installation`n"
 comfycli --help
